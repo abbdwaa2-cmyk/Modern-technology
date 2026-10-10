@@ -1,0 +1,1683 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse | منصة الترندات التقنية والاجتماعية</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           1. نظام التصميم (Design System Variables)
+           ========================================= */
+        :root {
+            /* الألوان الأساسية - الوضع النهاري */
+            --primary-hue: 240; /* Indigo Blue */
+            --secondary-hue: 330; /* Pink/Magenta */
+            --accent-hue: 160; /* Teal/Green for success */
+            
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: rgba(255, 255, 255, 0.8);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            
+            --border-light: #e2e8f0;
+            --border-dark: #cbd5e1;
+            
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --font-main: 'Tajawal', sans-serif;
+            --z-index-nav: 100;
+            --z-index-modal: 1000;
+            --z-index-toast: 2000;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-elevated: #334155;
+            --bg-overlay: rgba(15, 23, 42, 0.8);
+            
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            
+            --border-light: #334155;
+            --border-dark: #475569;
+            
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+        }
+
+        /* =========================================
+           2. إعادة الضبط والأساسيات (Reset & Base)
+           ========================================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul, ol { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+        input, textarea, select { font-family: inherit; width: 100%; }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--text-tertiary); 
+            border-radius: var(--radius-full); 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-hue); }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .flex { display: flex; }
+        .inline-flex { display: inline-flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-1 { gap: 0.25rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .hidden { display: none !important; }
+        .visible { display: block !important; }
+        
+        .w-full { width: 100%; }
+        .h-screen { height: 100vh; }
+        
+        .rounded-md { border-radius: var(--radius-md); }
+        .rounded-lg { border-radius: var(--radius-lg); }
+        .rounded-full { border-radius: var(--radius-full); }
+        
+        .shadow-card { box-shadow: var(--shadow-md); }
+        .hover-lift { transition: transform var(--transition-fast), box-shadow var(--transition-fast); }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: hsl(var(--primary-hue), 70%, 50%);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: hsl(var(--primary-hue), 70%, 45%);
+            box-shadow: 0 4px 12px hsla(var(--primary-hue), 70%, 50%, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: hsl(var(--secondary-hue), 70%, 50%);
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: hsl(var(--secondary-hue), 70%, 45%);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border-dark);
+            color: var(--text-primary);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background-color: var(--bg-elevated);
+            border-color: var(--primary-hue);
+            color: hsl(var(--primary-hue), 70%, 50%);
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: var(--radius-full);
+        }
+
+        /* Inputs */
+        .form-group { margin-bottom: 1rem; }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .form-input {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: hsl(var(--primary-hue), 70%, 50%);
+            box-shadow: 0 0 0 3px hsla(var(--primary-hue), 70%, 50%, 0.1);
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Badges & Tags */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-tech { background-color: hsla(var(--primary-hue), 70%, 50%, 0.1); color: hsl(var(--primary-hue), 70%, 40%); }
+        .badge-crypto { background-color: hsla(var(--secondary-hue), 70%, 50%, 0.1); color: hsl(var(--secondary-hue), 70%, 40%); }
+        .badge-env { background-color: hsla(var(--accent-hue), 70%, 40%, 0.1); color: hsl(var(--accent-hue), 70%, 30%); }
+        .badge-social { background-color: hsla(200, 70%, 50%, 0.1); color: hsl(200, 70%, 40%); }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+        }
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .card-body { padding: 1.5rem; }
+        .card-footer {
+            padding: 1rem 1.5rem;
+            background-color: var(--bg-body);
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--border-light) 50%, var(--bg-elevated) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius-md);
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: var(--z-index-toast);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid hsl(var(--primary-hue), 70%, 50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all var(--transition-normal);
+            pointer-events: auto;
+            min-width: 300px;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { border-left-color: hsl(var(--accent-hue), 70%, 40%); }
+        .toast.error { border-left-color: hsl(0, 70%, 50%); }
+        .toast.info { border-left-color: hsl(200, 70%, 50%); }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: var(--z-index-modal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+        .modal-backdrop.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.95);
+            transition: transform var(--transition-normal);
+        }
+        .modal-backdrop.active .modal-content { transform: scale(1); }
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* =========================================
+           3. مكونات الواجهة (Components)
+           ========================================= */
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-index-nav);
+            background-color: var(--bg-overlay);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 0;
+        }
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: hsl(var(--primary-hue), 70%, 50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link-item {
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            position: relative;
+        }
+        .nav-link-item:hover, .nav-link-item.active {
+            color: var(--text-primary);
+        }
+        .nav-link-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background-color: hsl(var(--primary-hue), 70%, 50%);
+            border-radius: 2px;
+        }
+        .mobile-menu-btn { display: none; }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            background: radial-gradient(circle at top right, hsla(var(--primary-hue), 70%, 50%, 0.1), transparent 50%),
+                        radial-gradient(circle at bottom left, hsla(var(--secondary-hue), 70%, 50%, 0.1), transparent 50%);
+            border-radius: var(--radius-xl);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, hsl(var(--primary-hue), 70%, 50%), hsl(var(--secondary-hue), 70%, 50%));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-full);
+            padding: 0.5rem 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition-fast);
+        }
+        .search-input-wrapper:focus-within {
+            box-shadow: 0 0 0 3px hsla(var(--primary-hue), 70%, 50%, 0.1);
+            border-color: hsl(var(--primary-hue), 70%, 50%);
+        }
+        .search-icon {
+            color: var(--text-tertiary);
+            margin-left: 0.5rem;
+        }
+        .search-input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+        .search-input:focus { outline: none; }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .filter-chip {
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-full);
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .filter-chip:hover {
+            border-color: hsl(var(--primary-hue), 70%, 50%);
+            color: hsl(var(--primary-hue), 70%, 50%);
+        }
+        .filter-chip.active {
+            background-color: hsl(var(--primary-hue), 70%, 50%);
+            color: white;
+            border-color: hsl(var(--primary-hue), 70%, 50%);
+        }
+
+        /* Article Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .article-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .article-image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        .article-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+        .article-card:hover .article-image {
+            transform: scale(1.05);
+        }
+        .article-category-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+        .article-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.75rem;
+        }
+        .article-author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-excerpt {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            transition: color var(--transition-fast);
+        }
+        .action-btn:hover { color: hsl(var(--primary-hue), 70%, 50%); }
+        .action-btn.liked { color: hsl(var(--secondary-hue), 70%, 50%); }
+
+        /* Sidebar Widgets */
+        .layout-sidebar {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+        @media (max-width: 1024px) {
+            .layout-sidebar { grid-template-columns: 1fr; }
+            .sidebar-widgets { order: -1; } /* Move sidebar up on mobile? Or keep down. Let's keep down but full width */
+        }
+        .widget {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .trend-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--border-light);
+        }
+        .trend-list li:last-child { border-bottom: none; }
+        .trend-rank {
+            font-weight: 800;
+            color: var(--text-tertiary);
+            width: 20px;
+        }
+        .trend-info { flex-grow: 1; margin-right: 1rem; }
+        .trend-name { font-weight: 600; font-size: 0.95rem; }
+        .trend-count { font-size: 0.8rem; color: var(--text-tertiary); }
+        
+        /* Chart Container */
+        .chart-container {
+            height: 200px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Admin Dashboard Styles */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: hsl(var(--primary-hue), 70%, 50%);
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .data-table th {
+            background-color: var(--bg-elevated);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .data-table tr:hover {
+            background-color: var(--bg-body);
+        }
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-published { background-color: hsla(var(--accent-hue), 70%, 40%, 0.1); color: hsl(var(--accent-hue), 70%, 30%); }
+        .status-draft { background-color: hsla(0, 0%, 50%, 0.1); color: var(--text-secondary); }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-light);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-col h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a {
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+        .footer-links a:hover { color: hsl(var(--primary-hue), 70%, 50%); }
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+        }
+        .social-icon:hover {
+            background-color: hsl(var(--primary-hue), 70%, 50%);
+            color: white;
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .nav-links-desktop { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero-title { font-size: 2rem; }
+            .layout-sidebar { grid-template-columns: 1fr; }
+            .articles-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Login Modal -->
+    <div class="modal-backdrop" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> تسجيل دخول المشرف</h3>
+                <button class="btn-icon" onclick="App.closeModal('loginModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="App.handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-input" id="username" placeholder="admin" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" class="form-input" id="password" placeholder="••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">دخول</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Article Modal -->
+    <div class="modal-backdrop" id="articleModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="articleModalTitle"><i class="fas fa-edit"></i> إضافة مقال جديد</h3>
+                <button class="btn-icon" onclick="App.closeModal('articleModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="articleForm" onsubmit="App.saveArticle(event)">
+                    <input type="hidden" id="editArticleId">
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">العنوان الرئيسي</label>
+                            <input type="text" class="form-input" id="artTitle" required placeholder="مثال: مستقبل الذكاء الاصطناعي...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">التصنيف</label>
+                            <select class="form-input" id="artCategory" required>
+                                <option value="tech">تقنية وذكاء اصطناعي</option>
+                                <option value="crypto">عملات رقمية وبلوكشين</option>
+                                <option value="env">بيئة واستدامة</option>
+                                <option value="social">ثقافة وتريندات اجتماعية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">رابط الصورة (اختياري)</label>
+                        <input type="url" class="form-input" id="artImage" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">الملخص القصير</label>
+                        <textarea class="form-input form-textarea" id="artExcerpt" rows="3" required placeholder="ملخص جذاب للقارئ..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">المحتوى الكامل (Markdown مدعوم جزئياً)</label>
+                        <textarea class="form-input form-textarea" id="artContent" rows="10" required placeholder="اكتب تفاصيل المقال هنا..."></textarea>
+                    </div>
+                    <div class="modal-footer" style="padding: 0; border: none; margin-top: 1rem;">
+                        <button type="button" class="btn btn-outline" onclick="App.closeModal('articleModal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ ونشر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container flex items-center justify-between">
+            <a href="#" class="nav-brand" onclick="App.navigate('home'); return false;">
+                <i class="fas fa-bolt"></i> Pulse
+            </a>
+            
+            <nav class="nav-links-desktop">
+                <a href="#" class="nav-link-item active" data-view="home" onclick="App.navigate('home'); return false;">الرئيسية</a>
+                <a href="#" class="nav-link-item" data-view="trending" onclick="App.navigate('trending'); return false;">الأكثر رواجاً</a>
+                <a href="#" class="nav-link-item" data-view="about" onclick="App.navigate('about'); return false;">عن المنصة</a>
+                <a href="#" class="nav-link-item admin-only hidden" data-view="dashboard" onclick="App.navigate('dashboard'); return false;"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button class="btn-icon" onclick="App.toggleTheme()" title="تبديل الوضع الليلي/النهاري">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="btn btn-primary admin-only hidden" onclick="App.openArticleModal()">
+                    <i class="fas fa-plus"></i> نشر مقال
+                </button>
+                <button class="btn btn-outline auth-toggle-btn" onclick="App.checkAuthState()">
+                    <span id="authBtnText">دخول</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="app-root">
+        <!-- Views will be injected here by JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Pulse</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">منصتك الأولى لمتابعة أحدث الترندات التقنية والعلمية والاجتماعية في العالم العربي.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="App.navigate('home'); return false;">الرئيسية</a></li>
+                        <li><a href="#" onclick="App.navigate('trending'); return false;">الأكثر رواجاً</a></li>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>التصنيفات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="App.filterByCategory('tech'); return false;">تقنية</a></li>
+                        <li><a href="#" onclick="App.filterByCategory('crypto'); return false;">عملات رقمية</a></li>
+                        <li><a href="#" onclick="App.filterByCategory('env'); return false;">بيئة</a></li>
+                        <li><a href="#" onclick="App.filterByCategory('social'); return false;">اجتماعي</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>النشرة البريدية</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">اشترك للحصول على ملخص أسبوعي لأهم الأخبار.</p>
+                    <div class="flex gap-2">
+                        <input type="email" class="form-input" placeholder="بريدك الإلكتروني" style="flex-grow: 1;">
+                        <button class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Pulse Platform. جميع الحقوق محفوظة. صُمم بواسطة مساعد الذكاء الاصطناعي.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * ============================================================
+         * Advanced Blog Platform Logic (JavaScript OOP Architecture)
+         * ============================================================
+         */
+
+        // --- 1. Data Models & Mock Database ---
+        const DB_KEYS = {
+            ARTICLES: 'pulse_articles_v1',
+            USERS: 'pulse_users_v1',
+            THEME: 'pulse_theme_pref'
+        };
+
+        const DEFAULT_ARTICLES = [
+            {
+                id: 1,
+                title: "ثورة الذكاء الاصطناعي التوليدي: كيف يغير ChatGPT عالم العمل؟",
+                category: "tech",
+                author: "أحمد التقني",
+                date: "2026-10-09",
+                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                excerpt: "استكشفنا تأثير النماذج اللغوية الكبيرة على الإنتاجية، التعليم، والإبداع البشري.",
+                content: "<p>في عام 2026، لم يعد الذكاء الاصطناعي مجرد خيال علمي. أدوات مثل ChatGPT و Midjourney أصبحت جزءاً أساسياً من سير عمل الملايين.</p><p>تشير الدراسات إلى أن 40% من المهام الكتابية الروتينية يمكن أتمتتها بالكامل، مما يتيح للعقول البشرية التركيز على الاستراتيجية والإبداع العالي المستوى.</p>",
+                likes: 1250,
+                views: 5400,
+                status: "published"
+            },
+            {
+                id: 2,
+                title: "بيتكوين يتجاوز حاجز المليون دولار: هل نحن أمام فقاعة أم ثورة مالية؟",
+                category: "crypto",
+                author: "سارة المالية",
+                date: "2026-10-08",
+                image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                excerpt: "تحليل معمق للأسباب وراء الارتفاع القياسي للعملات الرقمية ودور المؤسسات الكبرى.",
+                content: "<p>بعد اعتماد الصناديق المتداولة (ETFs) للبيتكوين في بورصات عالمية كبرى، تدفقت مليارات الدولارات إلى السوق.</p><p>لكن الخبراء يحذرون من التقلب الشديد وينصحون بعدم الاستثمار بأكثر مما تستطيع خسارته.</p>",
+                likes: 890,
+                views: 3200,
+                status: "published"
+            },
+            {
+                id: 3,
+                title: "الطاقة الشمسية العائمة: حل مبتكر لمشكلة ندرة الأراضي في الخليج",
+                category: "env",
+                author: "خالد الأخضر",
+                date: "2026-10-07",
+                image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                excerpt: "كيف تساهم الألواح الشمسية المثبتة على السدود والبحيرات في خفض درجات الحرارة وتوفير المياه?",
+                content: "<p>تجارب ناجحة في الإمارات والسعودية أظهرت أن تركيب الألواح الشمسية فوق المسطحات المائية يقلل تبخر المياه بنسبة 15% ويحسن كفاءة الألواح بسبب التبريد الطبيعي.</p>",
+                likes: 450,
+                views: 1800,
+                status: "published"
+            },
+            {
+                id: 4,
+                title: "ظاهرة 'Dopamine Detox': لماذا يميل الشباب للعزلة الرقمية؟",
+                category: "social",
+                author: "منى النفسية",
+                date: "2026-10-06",
+                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                excerpt: "دراسة سلوكية تفسر اتجاه الجيل Z نحو تقليل استخدام وسائل التواصل الاجتماعي لاستعادة التركيز.",
+                content: "<p>وسط سيل لا نهائي من الإشعارات، يبحث الشباب عن الهدوء. مفهوم 'سموم الدوبامين' أصبح ترينداً عالمياً يدعو للتوقف عن الأنشطة المحفزة للمخ لفترة محددة.</p>",
+                likes: 2100,
+                views: 8900,
+                status: "published"
+            },
+             {
+                id: 5,
+                title: "الحوسبة الكمومية: متى سنكسر تشفير الإنترنت الحالي؟",
+                category: "tech",
+                author: "أحمد التقني",
+                date: "2026-10-05",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                excerpt: "نظرة مستقبلية على التحديات الأمنية التي تفرضها أجهزة الكمبيوتر الكمومية.",
+                content: "<p>الشركات التقنية تستثمر مليارات في تطوير خوارزميات مقاومة للكم (Post-Quantum Cryptography) استعداداً لليوم الذي تصبح فيه الحواسيب التقليدية عاجزة عن فك الشفرات.</p>",
+                likes: 670,
+                views: 2400,
+                status: "draft" // Example of a draft
+            }
+        ];
+
+        const MOCK_USERS = [
+            { username: "admin", password: "1234", role: "admin" }
+        ];
+
+        // --- 2. Storage Manager Class ---
+        class StorageManager {
+            static get(key, defaultValue) {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : defaultValue;
+                } catch (e) {
+                    console.error("Storage error:", e);
+                    return defaultValue;
+                }
+            }
+
+            static set(key, value) {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } catch (e) {
+                    console.error("Storage set error:", e);
+                }
+            }
+        }
+
+        // --- 3. Article Service Class (Business Logic) ---
+        class ArticleService {
+            constructor() {
+                this.initDB();
+            }
+
+            initDB() {
+                let articles = StorageManager.get(DB_KEYS.ARTICLES, null);
+                if (!articles || articles.length === 0) {
+                    StorageManager.set(DB_KEYS.ARTICLES, DEFAULT_ARTICLES);
+                }
+            }
+
+            getAllArticles(filterCategory = 'all', searchQuery = '') {
+                let articles = StorageManager.get(DB_KEYS.ARTICLES, []);
+                
+                // Filter by Category
+                if (filterCategory !== 'all') {
+                    articles = articles.filter(a => a.category === filterCategory);
+                }
+
+                // Filter by Search Query
+                if (searchQuery.trim() !== '') {
+                    const q = searchQuery.toLowerCase();
+                    articles = articles.filter(a => 
+                        a.title.toLowerCase().includes(q) || 
+                        a.excerpt.toLowerCase().includes(q) ||
+                        a.author.toLowerCase().includes(q)
+                    );
+                }
+
+                // Sort by Date (Newest First)
+                return articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+
+            getPublishedArticles(limit = 10) {
+                return this.getAllArticles('all', '').filter(a => a.status === 'published').slice(0, limit);
+            }
+
+            getArticleById(id) {
+                const articles = StorageManager.get(DB_KEYS.ARTICLES, []);
+                return articles.find(a => a.id == id);
+            }
+
+            saveArticle(articleData) {
+                let articles = StorageManager.get(DB_KEYS.ARTICLES, []);
+                
+                if (articleData.id) {
+                    // Update existing
+                    const index = articles.findIndex(a => a.id == articleData.id);
+                    if (index !== -1) {
+                        articles[index] = { ...articles[index], ...articleData, updatedAt: new Date().toISOString() };
+                    }
+                } else {
+                    // Create new
+                    const newId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) + 1 : 1;
+                    const newArticle = {
+                        id: newId,
+                        ...articleData,
+                        createdAt: new Date().toISOString(),
+                        likes: 0,
+                        views: 0,
+                        status: 'published'
+                    };
+                    articles.push(newArticle);
+                }
+                
+                StorageManager.set(DB_KEYS.ARTICLES, articles);
+                return true;
+            }
+
+            deleteArticle(id) {
+                let articles = StorageManager.get(DB_KEYS.ARTICLES, []);
+                articles = articles.filter(a => a.id != id);
+                StorageManager.set(DB_KEYS.ARTICLES, articles);
+                return true;
+            }
+
+            toggleLike(id) {
+                let articles = StorageManager.get(DB_KEYS.ARTICLES, []);
+                const article = articles.find(a => a.id == id);
+                if (article) {
+                    article.likes += 1; // Simple increment for demo
+                    StorageManager.set(DB_KEYS.ARTICLES, articles);
+                    return article.likes;
+                }
+                return 0;
+            }
+        }
+
+        // --- 4. Auth Service Class ---
+        class AuthService {
+            constructor() {
+                this.currentUser = StorageManager.get('pulse_current_user', null);
+            }
+
+            login(username, password) {
+                const users = StorageManager.get(DB_KEYS.USERS, MOCK_USERS);
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    this.currentUser = user;
+                    StorageManager.set('pulse_current_user', user);
+                    return true;
+                }
+                return false;
+            }
+
+            logout() {
+                this.currentUser = null;
+                StorageManager.remove('pulse_current_user');
+            }
+
+            isAuthenticated() {
+                return this.currentUser !== null;
+            }
+
+            isAdmin() {
+                return this.currentUser && this.currentUser.role === 'admin';
+            }
+        }
+
+        // --- 5. UI Renderer Class (View Layer) ---
+        class UIRenderer {
+            constructor() {
+                this.root = document.getElementById('app-root');
+                this.articleService = new ArticleService();
+                this.authService = new AuthService();
+            }
+
+            renderHome(categoryFilter = 'all', searchQuery = '') {
+                const articles = this.articleService.getAllArticles(categoryFilter, searchQuery)
+                                            .filter(a => a.status === 'published');
+                
+                const trendingArticles = this.articleService.getPublishedArticles(4);
+
+                let html = `
+                    <section class="hero animate-fade-in">
+                        <div class="container hero-content">
+                            <h1 class="hero-title">نبض العالم الرقمي</h1>
+                            <p class="hero-subtitle">تابع أحدث التطورات في الذكاء الاصطناعي، العملات الرقمية، والاستدامة.</p>
+                            
+                            <div class="search-bar">
+                                <div class="search-input-wrapper">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" class="search-input" id="globalSearchInput" 
+                                           placeholder="ابحث عن موضوع، كاتب، أو ترند..."
+                                           value="${searchQuery}"
+                                           onkeyup="App.handleSearch(this.value)">
+                                </div>
+                            </div>
+
+                            <div class="filters">
+                                <button class="filter-chip ${categoryFilter === 'all' ? 'active' : ''}" onclick="App.filterByCategory('all')">الكل</button>
+                                <button class="filter-chip ${categoryFilter === 'tech' ? 'active' : ''}" onclick="App.filterByCategory('tech')">تقنية</button>
+                                <button class="filter-chip ${categoryFilter === 'crypto' ? 'active' : ''}" onclick="App.filterByCategory('crypto')">كريبتو</button>
+                                <button class="filter-chip ${categoryFilter === 'env' ? 'active' : ''}" onclick="App.filterByCategory('env')">بيئة</button>
+                                <button class="filter-chip ${categoryFilter === 'social' ? 'active' : ''}" onclick="App.filterByCategory('social')">اجتماعي</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="container layout-sidebar">
+                        <main class="main-feed">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-2xl font-bold">أحدث المقالات</h2>
+                                <span class="text-sm text-secondary">${articles.length} نتيجة</span>
+                            </div>
+                            
+                            <div class="articles-grid">
+                                ${articles.map(article => this.renderArticleCard(article)).join('')}
+                            </div>
+                        </main>
+
+                        <aside class="sidebar-widgets">
+                            <div class="widget">
+                                <h3 class="widget-title"><i class="fas fa-fire text-danger"></i> الأكثر رواجاً</h3>
+                                <ul class="trend-list">
+                                    ${trendingArticles.map((a, i) => `
+                                        <li>
+                                            <span class="trend-rank">#${i+1}</span>
+                                            <div class="trend-info">
+                                                <div class="trend-name">${a.title.substring(0, 30)}...</div>
+                                                <div class="trend-count">${a.views.toLocaleString()} مشاهدة</div>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+
+                            <div class="widget">
+                                <h3 class="widget-title"><i class="fas fa-chart-line text-primary"></i> إحصائيات الأسبوع</h3>
+                                <div class="chart-container">
+                                    <canvas id="weeklyChart" width="250" height="150"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="widget">
+                                <h3 class="widget-title"><i class="fas fa-envelope text-secondary"></i> نشرة Pulse</h3>
+                                <p class="text-sm text-secondary mb-2">لا تفوت أي خبر مهم. اشترك الآن.</p>
+                                <input type="email" class="form-input mb-2" placeholder="your@email.com">
+                                <button class="btn btn-primary w-full">اشتراك مجاني</button>
+                            </div>
+                        </aside>
+                    </div>
+                `;
+
+                this.root.innerHTML = html;
+                this.drawChart();
+            }
+
+            renderArticleCard(article) {
+                const catClass = `badge-${article.category}`;
+                const catName = this.getCategoryName(article.category);
+                
+                return `
+                    <article class="card article-card hover-lift animate-fade-in">
+                        <div class="article-image-container">
+                            <img src="${article.image || 'https://via.placeholder.com/400x250?text=Pulse'}" alt="${article.title}" class="article-image">
+                            <span class="badge ${catClass} article-category-badge">${catName}</span>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <div class="article-author-avatar">${article.author.charAt(0)}</div>
+                                <span>${article.author}</span>
+                                <span>•</span>
+                                <span>${this.formatDate(article.date)}</span>
+                            </div>
+                            <h3 class="article-title">${article.title}</h3>
+                            <p class="article-excerpt">${article.excerpt}</p>
+                            <div class="article-actions">
+                                <button class="action-btn like-btn" onclick="App.likeArticle(${article.id}, this)">
+                                    <i class="far fa-heart"></i> <span>${article.likes}</span>
+                                </button>
+                                <button class="action-btn" onclick="App.viewArticle(${article.id})">
+                                    <i class="far fa-eye"></i> <span>${article.views}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+
+            getCategoryName(cat) {
+                const names = { tech: 'تقنية', crypto: 'كريبتو', env: 'بيئة', social: 'اجتماعي' };
+                return names[cat] || cat;
+            }
+
+            formatDate(dateStr) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateStr).toLocaleDateString('ar-SA', options);
+            }
+
+            drawChart() {
+                const canvas = document.getElementById('weeklyChart');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+                
+                // Clear
+                ctx.clearRect(0, 0, width, height);
+                
+                // Data simulation
+                const data = [30, 45, 60, 50, 80, 70, 90];
+                const labels = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
+                const maxVal = Math.max(...data);
+                const barWidth = width / data.length * 0.6;
+                const spacing = width / data.length;
+
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#6366f1';
+                
+                data.forEach((val, i) => {
+                    const barHeight = (val / maxVal) * (height - 20);
+                    const x = i * spacing + (spacing - barWidth) / 2;
+                    const y = height - barHeight - 10;
+                    
+                    ctx.fillRect(x, y, barWidth, barHeight);
+                    
+                    // Label
+                    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-tertiary').trim() || '#94a3b8';
+                    ctx.font = '10px Tajawal';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(labels[i], x + barWidth/2, height - 2);
+                });
+            }
+
+            showNotification(message, type = 'info') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                let icon = 'fa-info-circle';
+                if(type === 'success') icon = 'fa-check-circle';
+                if(type === 'error') icon = 'fa-exclamation-circle';
+
+                toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+                container.appendChild(toast);
+
+                // Trigger reflow
+                void toast.offsetWidth;
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // --- 6. Application Controller (Main Orchestrator) ---
+        class AppController {
+            constructor() {
+                this.ui = new UIRenderer();
+                this.articles = new ArticleService();
+                this.auth = new AuthService();
+                this.currentView = 'home';
+                this.currentCategory = 'all';
+                this.searchQuery = '';
+                
+                this.init();
+            }
+
+            init() {
+                // Load Theme
+                const savedTheme = StorageManager.get(DB_KEYS.THEME, 'light');
+                document.body.setAttribute('data-theme', savedTheme);
+                this.updateThemeIcon(savedTheme);
+
+                // Check Auth State for UI elements
+                this.updateAuthUI();
+
+                // Initial Render
+                this.ui.renderHome(this.currentCategory, this.searchQuery);
+                
+                // Event Listeners for Global Keys
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeAllModals();
+                    }
+                });
+            }
+
+            navigate(view) {
+                this.currentView = view;
+                
+                // Update Nav Links Active State
+                document.querySelectorAll('.nav-link-item').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.view === view) link.classList.add('active');
+                });
+
+                if (view === 'home') {
+                    this.ui.renderHome(this.currentCategory, this.searchQuery);
+                } else if (view === 'trending') {
+                    this.ui.renderHome('all', ''); // Simplified for demo
+                    this.ui.showNotification("عرض قسم الترندات...", "info");
+                } else if (view === 'dashboard') {
+                    if (!this.auth.isAdmin()) {
+                        this.ui.showNotification("صلاحية غير كافية!", "error");
+                        this.navigate('home');
+                        return;
+                    }
+                    this.renderDashboard();
+                } else if (view === 'about') {
+                    this.renderAbout();
+                }
+            }
+
+            filterByCategory(cat) {
+                this.currentCategory = cat;
+                this.searchQuery = ''; // Reset search when filtering
+                const searchInput = document.getElementById('globalSearchInput');
+                if(searchInput) searchInput.value = '';
+                
+                this.ui.renderHome(this.currentCategory, this.searchQuery);
+            }
+
+            handleSearch(query) {
+                this.searchQuery = query;
+                // Debounce logic could go here, but simple immediate update for now
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
+                    this.ui.renderHome(this.currentCategory, this.searchQuery);
+                }, 300);
+            }
+
+            toggleTheme() {
+                const current = document.body.getAttribute('data-theme');
+                const next = current === 'light' ? 'dark' : 'light';
+                document.body.setAttribute('data-theme', next);
+                StorageManager.set(DB_KEYS.THEME, next);
+                this.updateThemeIcon(next);
+                // Redraw chart with new colors
+                this.ui.drawChart();
+            }
+
+            updateThemeIcon(theme) {
+                const icon = document.getElementById('themeIcon');
+                if (icon) {
+                    icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+                }
+            }
+
+            checkAuthState() {
+                if (this.auth.isAuthenticated()) {
+                    this.auth.logout();
+                    this.updateAuthUI();
+                    this.ui.showNotification("تم تسجيل الخروج بنجاح", "success");
+                    this.navigate('home');
+                } else {
+                    this.openModal('loginModal');
+                }
+            }
+
+            updateAuthUI() {
+                const adminElements = document.querySelectorAll('.admin-only');
+                const authBtnText = document.getElementById('authBtnText');
+                
+                if (this.auth.isAdmin()) {
+                    adminElements.forEach(el => el.classList.remove('hidden'));
+                    if(authBtnText) authBtnText.innerText = "خروج";
+                } else {
+                    adminElements.forEach(el => el.classList.add('hidden'));
+                    if(authBtnText) authBtnText.innerText = "دخول";
+                }
+            }
+
+            handleLogin(e) {
+                e.preventDefault();
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+
+                if (this.auth.login(user, pass)) {
+                    this.closeModal('loginModal');
+                    this.updateAuthUI();
+                    this.ui.showNotification(`مرحباً ${user}`, "success");
+                    this.navigate('dashboard');
+                } else {
+                    this.ui.showNotification("بيانات الدخول خاطئة", "error");
+                }
+            }
+
+            openModal(modalId) {
+                document.getElementById(modalId).classList.add('active');
+            }
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            }
+
+            closeAllModals() {
+                document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('active'));
+            }
+
+            openArticleModal(editId = null) {
+                const modal = document.getElementById('articleModal');
+                const titleEl = document.getElementById('articleModalTitle');
+                const form = document.getElementById('articleForm');
+                
+                // Reset Form
+                form.reset();
+                document.getElementById('editArticleId').value = '';
+
+                if (editId) {
+                    const article = this.articles.getArticleById(editId);
+                    if (article) {
+                        titleEl.innerHTML = '<i class="fas fa-edit"></i> تعديل مقال';
+                        document.getElementById('editArticleId').value = article.id;
+                        document.getElementById('artTitle').value = article.title;
+                        document.getElementById('artCategory').value = article.category;
+                        document.getElementById('artImage').value = article.image;
+                        document.getElementById('artExcerpt').value = article.excerpt;
+                        document.getElementById('artContent').value = article.content;
+                    }
+                } else {
+                    titleEl.innerHTML = '<i class="fas fa-plus"></i> إضافة مقال جديد';
+                }
+
+                this.openModal('articleModal');
+            }
+
+            saveArticle(e) {
+                e.preventDefault();
+                
+                const editId = document.getElementById('editArticleId').value;
+                const articleData = {
+                    id: editId ? parseInt(editId) : null,
+                    title: document.getElementById('artTitle').value,
+                    category: document.getElementById('artCategory').value,
+                    image: document.getElementById('artImage').value,
+                    excerpt: document.getElementById('artExcerpt').value,
+                    content: document.getElementById('artContent').value,
+                    author: this.auth.currentUser ? this.auth.currentUser.username : "Admin",
+                    date: new Date().toISOString().split('T')[0]
+                };
+
+                const success = this.articles.saveArticle(articleData);
+                
+                if (success) {
+                    this.closeModal('articleModal');
+                    this.ui.showNotification(editId ? "تم تحديث المقال" : "تم نشر المقال بنجاح", "success");
+                    this.renderDashboard(); // Refresh dashboard
+                } else {
+                    this.ui.showNotification("فشل في الحفظ", "error");
+                }
+            }
+
+            deleteArticle(id) {
+                if(confirm("هل أنت متأكد من حذف هذا المقال؟")) {
+                    this.articles.deleteArticle(id);
+                    this.ui.showNotification("تم الحذف", "success");
+                    this.renderDashboard();
+                }
+            }
+
+            likeArticle(id, btnElement) {
+                const newLikes = this.articles.toggleLike(id);
+                const span = btnElement.querySelector('span');
+                const icon = btnElement.querySelector('i');
+                
+                span.innerText = newLikes;
+                icon.classList.replace('far', 'fas');
+                btnElement.classList.add('liked');
+                
+                // Prevent double liking in real app would require tracking user ID per article
+            }
+
+            viewArticle(id) {
+                const article = this.articles.getArticleById(id);
+                if(article) {
+                    alert(`فتح المقال:\n\n${article.title}\n\n${article.content.substring(0, 100)}...`);
+                    // In a real SPA, we'd route to /article/:id
+                }
+            }
+
+            renderDashboard() {
+                const allArticles = this.articles.getAllArticles('all', '');
+                const publishedCount = allArticles.filter(a => a.status === 'published').length;
+                const draftCount = allArticles.filter(a => a.status === 'draft').length;
+                const totalViews = allArticles.reduce((sum, a) => sum + a.views, 0);
+                const totalLikes = allArticles.reduce((sum, a) => sum + a.likes, 0);
+
+                let html = `
+                    <div class="container mt-6 animate-fade-in">
+                        <div class="flex justify-between items-center mb-6">
+                            <h1 class="text-3xl font-bold">لوحة التحكم</h1>
+                            <button class="btn btn-primary" onclick="App.openArticleModal()">
+                                <i class="fas fa-plus"></i> مقال جديد
+                            </button>
+                        </div>
+
+                        <div class="dashboard-stats">
+                            <div class="stat-card">
+                                <div class="stat-label">إجمالي المقالات</div>
+                                <div class="stat-value">${allArticles.length}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">منشور</div>
+                                <div class="stat-value" style="color: hsl(var(--accent-hue), 70%, 40%)">${publishedCount}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">مسودات</div>
+                                <div class="stat-value" style="color: var(--text-secondary)">${draftCount}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">مشاهدات كلية</div>
+                                <div class="stat-value">${totalViews.toLocaleString()}</div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>إدارة المحتوى</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>العنوان</th>
+                                            <th>التصنيف</th>
+                                            <th>الحالة</th>
+                                            <th>التاريخ</th>
+                                            <th>إجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${allArticles.map(a => `
+                                            <tr>
+                                                <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${a.title}</td>
+                                                <td><span class="badge badge-${a.category}">${this.ui.getCategoryName(a.category)}</span></td>
+                                                <td>
+                                                    <span class="status-pill ${a.status === 'published' ? 'status-published' : 'status-draft'}">
+                                                        ${a.status === 'published' ? 'منشور' : 'مسودة'}
+                                                    </span>
+                                                </td>
+                                                <td>${this.ui.formatDate(a.date)}</td>
+                                                <td>
+                                                    <div class="flex gap-2">
+                                                        <button class="btn btn-icon btn-outline" onclick="App.openArticleModal(${a.id})" title="تعديل">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </button>
+                                                        <button class="btn btn-icon btn-outline" style="color: red;" onclick="App.deleteArticle(${a.id})" title="حذف">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                this.ui.root.innerHTML = html;
+            }
+
+            renderAbout() {
+                 this.ui.root.innerHTML = `
+                    <div class="container mt-6 text-center animate-fade-in" style="min-height: 60vh; display:flex; flex-direction:column; justify-content:center;">
+                        <h1 class="text-4xl font-bold mb-4">حول منصة Pulse</h1>
+                        <p class="text-lg text-secondary max-w-2xl mx-auto mb-6">
+                            Pulse هي منصة تجريبية متقدمة تعرض قدرات الواجهات الأمامية الحديثة (Modern Frontend Capabilities). 
+                            تم بناؤها باستخدام HTML5, CSS3 Variables, و Vanilla JavaScript مع نمط البرمجة الكائنية (OOP).
+                        </p>
+                        <div class="flex justify-center gap-4">
+                            <button class="btn btn-primary" onclick="App.navigate('home')">عودة للرئيسية</button>
+                        </div>
+                    </div>
+                 `;
+            }
+        }
+
+        // Initialize App
+        window.App = new AppController();
+
+    </script>
+</body>
+</html>
